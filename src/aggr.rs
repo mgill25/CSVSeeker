@@ -1,4 +1,4 @@
-use crate::Row;
+use crate::{Row, rowutils};
 use crate::Cell::IntVal;
 
 pub fn apply_aggr(rows: Vec<&Row>, aggr_query: &String) {
@@ -6,7 +6,7 @@ pub fn apply_aggr(rows: Vec<&Row>, aggr_query: &String) {
         "" => {
             // no aggregation to be done, just print matched rows
             for row in rows {
-                println!("> {:?}", row);
+                rowutils::print_row(&row);
             }
         }
         "count(*)" => {

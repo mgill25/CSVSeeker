@@ -10,6 +10,7 @@ mod conds;
 mod query_parser;
 mod aggr;
 mod filter;
+mod rowutils;
 
 /*
 fn main() {
@@ -52,6 +53,7 @@ pub enum Cell {
     IntVal(i32),
     StringVal(String),
     BooleanVal(bool),
+    NullVal
 }
 
 #[derive(Debug)]
@@ -103,8 +105,8 @@ fn check_rows(buf: BufReader<File>,
             if filter::filter_row(&conditions,
                                   cell,
                                   exp_col) {
-                let cell_parsed = cell.parse::<i32>().unwrap();
-                rows.push(Row { cells: vec![IntVal(cell_parsed)] });
+                let complete_row = rowutils::to_cells(&actual_line, &cols_with_type);
+                rows.push(complete_row);
             } else {
                 rows.push(Row { cells: vec![] });
             }
