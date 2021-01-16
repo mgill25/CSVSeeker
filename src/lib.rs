@@ -63,37 +63,6 @@ pub struct Row {
 
 
 // Evaluate $conditions for every row in the table
-/**
-for every row
-  cells = split by comma
-  for idx, cell in cells
-    get_current_cell_type()
-    match on input conditions {
-        if greaterThan/lessThan/equalTo {
-            match on current_cell_type {
-                if ColumnInt32 =>
-                    apply greater_than/less_than/equal_to function
-                    push result to rows vector
-            }
-        }
-    }
-  return rows
-----
-
-// Question: Do we *always* do Full Table Scans whenever we touch rows on disk?
-// In other words: Is an Index the only strategy we have in PostgreSQL/MySQL to do
-// "data skipping" ? Surely not.
-// Databricks-like Data Skipping is possible in MySQL via "Clustered Indexes".
-// (but those are indexes!)
-
-for every row
-    cells = split by comma
-    for idx,cell in cells
-        cell_type = get_current_cell_type() // O(1) but can be cached outside the loop
-        here, we know what sort of condition is to be applied at what "cell".
-        apply_condition(cell, cell_type, condition)
-
-*/
 fn check_rows(buf: BufReader<File>,
               conditions: &Conditions,
               cols_with_type: HashMap<usize, Column>) -> Vec<Row> {
