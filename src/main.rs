@@ -17,8 +17,13 @@ fn main() {
                     print!("-# ");
                     let _ = io::stdout().flush();
                     let mut query = String::new();
-                    stdin.lock().read_line(&mut query).unwrap();
-                    if !query.is_empty() {
+                    let bytes = stdin.lock().read_line(&mut query).unwrap();
+                    if bytes == 0 {
+                        println!("Finito~");
+                        std::process::exit(0);
+                    }
+                    if !query.trim_end().is_empty() {
+                        println!("Query = {}", query);
                         prop_data::query_data(&file_name, &query);
                     }
                 }
