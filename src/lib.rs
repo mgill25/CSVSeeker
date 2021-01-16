@@ -29,6 +29,7 @@ fn main() {
 enum ColumnType {
     ColumnString,
     ColumnInt32,
+    ColumnBool,
     Null
 }
 
@@ -43,6 +44,10 @@ pub enum Conditions {
     IntGreaterThanComparison(String, i32),
     IntLessThanComparison(String, i32),
     IntEqualComparison(String, i32),
+    StringEqualComparison(String, String),
+    StringGreaterThanComparison(String, String),
+    StringLessThanComparison(String, String),
+    BooleanComparison(bool, bool),
 }
 
 // Representation of a Row, comprising of multiple "cells" of data items.
@@ -119,6 +124,7 @@ fn parse_header(header: &String) -> HashMap<usize, Column> {
         let col_type = match raw_col_type.trim_end() {
             "string" => ColumnType::ColumnString,
             "int" => ColumnType::ColumnInt32,
+            "bool" => ColumnType::ColumnBool,
             _ => ColumnType::Null,
         };
         let col = Column { name: col_name.parse().unwrap(), dtype: col_type };

@@ -8,7 +8,8 @@ pub fn to_cells(row_string: &str, cols_with_type: &HashMap<usize, Column>) -> Ro
         let exp_col = cols_with_type.get(&idx).unwrap();
         let cell = match exp_col.dtype {
             ColumnType::ColumnString => {StringVal(String::from(cell_string))},
-            ColumnType::ColumnInt32 => {IntVal(cell_string.parse::<i32>().unwrap())},
+            ColumnType::ColumnInt32  => {IntVal(cell_string.parse::<i32>().unwrap())},
+            ColumnType::ColumnBool   => {BooleanVal(cell_string.parse::<bool>().unwrap())},
             ColumnType::Null => {NullVal}
         };
         cells.push(cell);

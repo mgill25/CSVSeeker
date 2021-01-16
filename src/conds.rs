@@ -57,3 +57,15 @@ pub fn equal_to(exp_col: &Column,
         false
     }
 }
+
+pub fn string_equal_to(exp_col: &Column, col_name: &String, cell: &str, condition_val: &str) -> bool {
+    if exp_col.name.eq(col_name) { cell == condition_val } else { false }
+}
+
+pub fn string_gt(exp_col: &Column, col_name: &String, cell: &str, condition_val: &str) -> bool {
+    if exp_col.name.eq(col_name) { cell > condition_val } else { false }
+}
+pub fn string_lt(exp_col: &Column, col_name: &String, cell: &str, condition_val: &str) -> bool {
+    if exp_col.name.eq(col_name) { cell < condition_val } else { false }
+}
+
