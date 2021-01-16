@@ -4,10 +4,12 @@ use crate::Conditions::{IntGreaterThanComparison, IntLessThanComparison, IntEqua
 use std::collections::HashMap;
 use crate::ColumnType::{ColumnInt32};
 use aggr::apply_aggr;
+use crate::Cell::IntVal;
 
 mod conds;
 mod query_parser;
 mod aggr;
+mod filter;
 
 /*
 fn main() {
@@ -35,7 +37,7 @@ pub struct Column {
     dtype: ColumnType
 }
 
-enum Conditions {
+pub enum Conditions {
     Noop,
     IntGreaterThanComparison(String, i32),
     IntLessThanComparison(String, i32),
@@ -59,6 +61,37 @@ pub struct Row {
 
 
 // Evaluate $conditions for every row in the table
+/**
+for every row
+  cells = split by comma
+  for idx, cell in cells
+    get_current_cell_type()
+    match on input conditions {
+        if greaterThan/lessThan/equalTo {
+            match on current_cell_type {
+                if ColumnInt32 =>
+                    apply greater_than/less_than/equal_to function
+                    push result to rows vector
+            }
+        }
+    }
+  return rows
+----
+
+// Question: Do we *always* do Full Table Scans whenever we touch rows on disk?
+// In other words: Is an Index the only strategy we have in PostgreSQL/MySQL to do
+// "data skipping" ? Surely not.
+// Databricks-like Data Skipping is possible in MySQL via "Clustered Indexes".
+// (but those are indexes!)
+
+for every row
+    cells = split by comma
+    for idx,cell in cells
+        cell_type = get_current_cell_type() // O(1) but can be cached outside the loop
+        here, we know what sort of condition is to be applied at what "cell".
+        apply_condition(cell, cell_type, condition)
+
+*/
 fn check_rows(buf: BufReader<File>,
               conditions: &Conditions,
               cols_with_type: HashMap<usize, Column>) -> Vec<Row> {
@@ -67,44 +100,13 @@ fn check_rows(buf: BufReader<File>,
         let actual_line = line.unwrap();
         for (idx, cell) in actual_line.split(",").enumerate() {
             let exp_col = cols_with_type.get(&idx).unwrap();
-            match conditions {
-                IntGreaterThanComparison(col_name, condition_val) => {
-                    match exp_col.dtype {
-                        ColumnInt32 => {
-                            rows.push(conds::greater_than(&actual_line,
-                                                &exp_col,
-                                                &col_name,
-                                                &cell,
-                                                condition_val));
-                        },
-                        _ => {}
-                    }
-                },
-                IntLessThanComparison(col_name, condition_val) => {
-                    match exp_col.dtype {
-                        ColumnInt32 => {
-                            rows.push(conds::less_than(&actual_line,
-                                             &exp_col,
-                                             &col_name,
-                                             &cell,
-                                             condition_val));
-                        },
-                        _ => {}
-                    }
-                },
-                IntEqualComparison(col_name, condition_val) => {
-                    match exp_col.dtype {
-                        ColumnInt32 => {
-                            rows.push(conds::equal_to(&actual_line,
-                                            &exp_col,
-                                            &col_name,
-                                            &cell,
-                                            condition_val));
-                        },
-                        _ => {}
-                    }
-                },
-                _ => {}
+            if filter::filter_row(&conditions,
+                                  cell,
+                                  exp_col) {
+                let cell_parsed = cell.parse::<i32>().unwrap();
+                rows.push(Row { cells: vec![IntVal(cell_parsed)] });
+            } else {
+                rows.push(Row { cells: vec![] });
             }
         }
     });

@@ -9,7 +9,7 @@ fn main() {
             .into_string() {
             Ok(file_name) => {
                 // let filename = String::from("./src/data/3.csv");
-                let query = String::from("count(*) where age = 30");
+                let query = String::from("age > 30");
                 prop_data::query_data(&file_name, &query);
             },
             Err(e) => {

@@ -3,6 +3,12 @@ use crate::Cell::IntVal;
 
 pub fn apply_aggr(rows: Vec<&Row>, aggr_query: &String) {
     match aggr_query.trim_end() {
+        "" => {
+            // no aggregation to be done, just print matched rows
+            for row in rows {
+                println!("> {:?}", row);
+            }
+        }
         "count(*)" => {
             println!("> count = {}", rows.len());
         },
