@@ -4,13 +4,12 @@ use std::io::{BufRead, Write};
 
 fn main() {
     if args_os().len() < 2 {
-        println!("Usage: prop_data <path_to_file>");
+        println!("Usage: csvseeker <path_to_file>");
     } else {
         match args_os()
             .nth(1).unwrap()
             .into_string() {
             Ok(file_name) => {
-                // let filename = String::from("./src/data/3.csv");
                 let stdin = io::stdin();
                 println!("Welcome to CSVSeeker!");
                 loop {
