@@ -9,7 +9,7 @@ pub fn to_cells(row_string: &str, cols_with_type: &HashMap<usize, Column>) -> Ro
         let cell = match exp_col.dtype {
             ColumnType::ColumnString => {StringVal(String::from(cell_string))},
             ColumnType::ColumnInt32  => {IntVal(cell_string.parse::<i32>().unwrap())},
-            ColumnType::ColumnBool   => {BooleanVal(cell_string.parse::<bool>().unwrap())},
+            ColumnType::ColumnBool   => { BooleanVal(cell_to_bool(cell_string)) },
             ColumnType::Null => {NullVal}
         };
         cells.push(cell);
@@ -28,4 +28,11 @@ pub fn print_row(row: &Row) {
         print!("\t");
     }
     println!();
+}
+
+pub fn cell_to_bool(cell: &str) -> bool {
+    let lowercase_cell = cell.to_lowercase();
+    let trimmed_cell = lowercase_cell.trim_end();
+    let cell_result: bool = trimmed_cell.parse().unwrap();
+    cell_result
 }

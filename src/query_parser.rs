@@ -1,6 +1,7 @@
 use crate::{Conditions, ColumnType};
 use crate::ColumnType::{ColumnBool, ColumnInt32, ColumnString};
 
+#[derive(Debug)]
 pub struct Query {
     pub(crate) aggr: String,
     pub(crate) cond: Conditions,
@@ -32,6 +33,9 @@ fn parse_condition(cond: &str) -> Conditions {
         ("=", ColumnString) => {
             Conditions::StringEqualComparison(column_name.parse().unwrap(), p.parse().unwrap())
         },
+        ("=", ColumnBool) => {
+            Conditions::BooleanComparison(column_name.parse().unwrap(), p.parse().unwrap())
+        }
         (_, _) => Conditions::Noop
     }
 }

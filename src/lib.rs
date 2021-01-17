@@ -39,6 +39,7 @@ pub struct Column {
     dtype: ColumnType
 }
 
+#[derive(Debug)]
 pub enum Conditions {
     Noop,
     IntGreaterThanComparison(String, i32),
@@ -47,7 +48,7 @@ pub enum Conditions {
     StringEqualComparison(String, String),
     StringGreaterThanComparison(String, String),
     StringLessThanComparison(String, String),
-    BooleanComparison(bool, bool),
+    BooleanComparison(String, bool),
 }
 
 // Representation of a Row, comprising of multiple "cells" of data items.

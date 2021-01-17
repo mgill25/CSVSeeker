@@ -1,5 +1,6 @@
 use crate::{Column, Row};
 use crate::Cell::IntVal;
+use crate::rowutils::cell_to_bool;
 
 pub fn greater_than(exp_col: &Column,
                     col_name: &String,
@@ -69,3 +70,6 @@ pub fn string_lt(exp_col: &Column, col_name: &String, cell: &str, condition_val:
     if exp_col.name.eq(col_name) { cell < condition_val } else { false }
 }
 
+pub fn boolean_equal_to(exp_col: &Column, col_name: &String, cell: &str, condition_val: &bool) -> bool {
+    if exp_col.name.eq(col_name) { cell_to_bool(cell) == *condition_val } else { false }
+}
