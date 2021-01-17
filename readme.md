@@ -1,4 +1,4 @@
-# prop_data
+# csvseeker
 
-Just a reader to think about storage.
+Just a simple SQL-ish reader to think about storage
 

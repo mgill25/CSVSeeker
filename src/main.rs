@@ -23,7 +23,7 @@ fn main() {
                     }
                     if !query.trim_end().is_empty() {
                         println!("Query = {}", query);
-                        prop_data::query_data(&file_name, &query);
+                        csvseeker::query_data(&file_name, &query);
                     }
                 }
             },

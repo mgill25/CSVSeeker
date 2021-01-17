@@ -6,7 +6,7 @@ fn criterion_benchmark(c: &mut Criterion) {
     let query = String::from("count(*) where dob = 1990");
     c.bench_function(test_name.as_str(), |b| {
         b.iter(|| {
-            prop_data::query_data(&filename, &query);
+            csvseeker::query_data(&filename, &query);
         })
     });
 }

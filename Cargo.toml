@@ -1,5 +1,5 @@
 [package]
-name = "prop_data"
+name = "csvseeker"
 version = "0.1.0"
 authors = ["Manish Gill <manish.gill@tomtom.com>"]
 edition = "2018"
